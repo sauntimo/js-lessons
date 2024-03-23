@@ -13,3 +13,5 @@ snake_case_like_this
 kebab-case-like-this-
 PascalCase
 */
+
+// to run script type into terminal "node filename" so e.g. node part-1.js

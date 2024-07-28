@@ -63,4 +63,7 @@ const res3 = numbers3
 
 console.log(res3);
 
-// practice using methods map, filter and reduce
+// practice using methods map, filter and reduce on mdn
+// filter is to filter things obvs
+// map is to transform an array, taking the current value and doing something to it
+// reduce is a way to take a whole array and summarise somehow

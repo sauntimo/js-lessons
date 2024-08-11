@@ -79,15 +79,16 @@ const testNumbers = [73, 150, 45, 7, 234, 4, 62, 83, 30, 3, 41, 100, 33, 300];
 // example of chaining array methods together
 const result = testNumbers
   // we can filter using a predicate function
-  .filter(numberIsEven)
+  .filter(numberIsEven) // each step is returning a new array with the results of the filter - chaining array functions being useful
   // and because filter returns an array, we can chain the result to another filter
   .filter(numberLessThan100)
   // and chain the result to another filter...
   .filter(numberHasA3InIt);
 
-// console.log(result);
+console.log(result);
 // should result in
 // [30]
+// Benji note - this made sense
 
 /********
  * DATA *
@@ -117,28 +118,47 @@ const topPerformerIds = [1, 9, 3, 6, 2];
 //#region getEngineers
 // get the names of all the engineers
 const getEngineers = (people) =>
-  people
-    // get people who's department matches engineering
-    .filter((person) => person.department === "Engineering")
-    // return their names
-    .map((person) => person.name);
+  people 
+  // get people who's department matches engineering
+  .filter((person) => person.department === "Engineering")
+  // return their names
+  .map((person) => person.name);
 
-// console.log(getEngineers(people));
+// Benji note - unsure why uses people, people twice at start, then changes to person afterwards?
+// If written like traditional function would it be:
+
+// ********* NEED TO REVISIT SINGLE RULE FUNCTIONS
+
+// function findEngineers(people) {
+// return people
+// .filter(function(person) {              using person just as another word to help associate (could be anything)
+// return person.department === "Engineering"})
+// .map(function(person) {
+// return person.name})
+
+// UNSURE WHY USING PERSON IN PART 2 OF ABOVE FUNCTION?
+
+//  When going through it again I think I understand
+
+console.log(getEngineers(people));
 // should result in
 // [ 'Alice', 'Dave', 'Ian', 'Kate' ]
 
 //#region getTopPerformers
 // get the names of all the top performers
-const getTopPerformers = (people) =>
+const getTopPerformers = (people) => // so are you just making a random argument called people?
   people
     // get people who's id was in a separate array
-    .filter((person) => topPerformerIds.includes(person.id))
+    .filter((person) => topPerformerIds.includes(person.id)) // why do you need to filter before doing the includes function?
     // return their names
-    .map((person) => person.name);
+    .map((person) => person.name); // mapping pulls the name?
 
-// console.log(getTopPerformers(people));
+console.log(getTopPerformers(people));
 // should result in
 // [ 'Alice', 'Bob', 'Charlie', 'Frank', 'Ian' ]
+
+
+// NEED THIS ONE WALKING THROUGH (below)
 
 //#region addManagerName
 // add the name of each person's manager to their person record, if they have a manager
@@ -185,6 +205,8 @@ const addManagerName = (people) =>
 //   ...
 // ]
 
+// lol this one is a step beyond
+
 //#region getYoungestHalf
 // get the names and ages of the youngest 50% of the group
 const getYoungestHalf = (people) => {
@@ -228,7 +250,7 @@ const getManagers = (people) =>
     .filter((person) =>
       // return only people where someone else has this person as their manager
       people.some((person2) => person2.managerId === person.id)
-    )
+    )  // this is really clever - will need to walk through to make sure i understand fully
     // map the managers
     .map((manager) => ({
       // return an object directly

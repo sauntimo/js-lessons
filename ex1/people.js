@@ -85,7 +85,7 @@ const result = testNumbers
   // and chain the result to another filter...
   .filter(numberHasA3InIt);
 
-console.log(result);
+// console.log(result);
 // should result in
 // [30]
 // Benji note - this made sense
@@ -95,7 +95,6 @@ console.log(result);
  ********/
 
 //#region Data
-
 const people = [
   { id: 1, name: "Alice", age: 32, department: "Engineering", managerId: 10 },
   { id: 2, name: "Bob", age: 25, department: "Product", managerId: 7 },
@@ -118,11 +117,11 @@ const topPerformerIds = [1, 9, 3, 6, 2];
 //#region getEngineers
 // get the names of all the engineers
 const getEngineers = (people) =>
-  people 
-  // get people who's department matches engineering
-  .filter((person) => person.department === "Engineering")
-  // return their names
-  .map((person) => person.name);
+  people
+    // get people who's department matches engineering
+    .filter((person) => person.department === "Engineering")
+    // return their names
+    .map((person) => person.name);
 
 // Benji note - unsure why uses people, people twice at start, then changes to person afterwards?
 // If written like traditional function would it be:
@@ -140,23 +139,26 @@ const getEngineers = (people) =>
 
 //  When going through it again I think I understand
 
-console.log(getEngineers(people));
+// console.log(getEngineers(people));
 // should result in
 // [ 'Alice', 'Dave', 'Ian', 'Kate' ]
 
 //#region getTopPerformers
 // get the names of all the top performers
-const getTopPerformers = (people) => // so are you just making a random argument called people?
+const getTopPerformers = (
+  people // so are you just making a random argument called people?
+) =>
   people
     // get people who's id was in a separate array
-    .filter((person) => topPerformerIds.includes(person.id)) // why do you need to filter before doing the includes function?
+    .filter((person) => topPerformerIds.includes(person.id)) // .filter is the function I want to do, .includes is the rule I'm setting as to whether the
+    // data should be included in the .filter return array or not
     // return their names
-    .map((person) => person.name); // mapping pulls the name?
+    .map((person) => person.name); // mapping is often used to transform data, here transforming from an object to just one of the objects
+// properties, i.e the persons name which is a string
 
-console.log(getTopPerformers(people));
+// console.log(getTopPerformers(people));
 // should result in
 // [ 'Alice', 'Bob', 'Charlie', 'Frank', 'Ian' ]
-
 
 // NEED THIS ONE WALKING THROUGH (below)
 
@@ -166,13 +168,50 @@ const addManagerName = (people) =>
   // map the array of people
   people.map((person) => ({
     // return an object with all the properties of the person item
+    // ... is making a copy of the object "person" so we can manipulate it and add something to it
+    // add notes from working doc about spread operator
     ...person,
     // and a new property for their manager's name
     // find their manager from the list
-    managerName:
-      // if find() returned a person, get their name - otherwise, return undefined
-      people.find((person2) => person2.id === person.managerId)?.name,
+    // if find() returned a person, get their name - otherwise, return undefined
+    // using .find instead of .filter because .find returns a value from an array, whereas .filter returns the whole filtered array
+    // and only returns the first value that meets criteria, stops after that, .filter returns all
+    // .name at the end returns the name property of the person we found using the function
+    // added ? in front of .name so if the manager object exists then return the name property, if not then return undefined, so charlie returns undefined
+    managerName: people.find(
+      (potentialManager) => potentialManager.id === person.managerId
+    )?.name,
   }));
+
+// the above written out without comments etc
+// const newPerson = {
+//   ...person,
+//   managerName : "Bob"
+// }
+
+// const car = {
+//   make: {
+//     company: "audi",
+//     groupOwner: {
+//       name: "vw",
+//     },
+//   },
+// };
+
+// car2 = {
+//   make: {
+//     company: "ford",
+//   },
+// };
+
+// car2.make.groupOwner?.name?.length;
+
+// function addManagerName2(people) {
+//   people.map(function (person) {
+//     person.managerName = "Bob";
+//     return person;
+//   });
+// }
 
 // console.log(addManagerName(people));
 // should result in (only showing first 3 entries, there should be 10)
@@ -205,28 +244,22 @@ const addManagerName = (people) =>
 //   ...
 // ]
 
-// lol this one is a step beyond
-
 //#region getYoungestHalf
 // get the names and ages of the youngest 50% of the group
-const getYoungestHalf = (people) => {
+const getYoungestHalf = (peopleArg) => {
+  // this function has 2 statements
+  // first one is to calculate how many objects from the array to work with
+  // second is to return the objects and transform them at same time
+  // It needs return because it is doing 2 statements
   // calculate how many people in 50%, round down
-  const numberToInclude = Math.floor(people.length / 2);
-
-  const ages = people
-    // get an array of everyone's ages
-    .map((person) => person.age)
-    // sort it youngest first
-    .sort((a, b) => (a >= b ? 1 : -1))
-    // return the first 5 records
-    .slice(0, numberToInclude);
+  const numberToInclude = Math.floor(peopleArg.length / 2);
 
   return (
-    people
-      // get people who's ages are in our list
-      .filter((person) => ages.includes(person.age))
+    peopleArg
       // sort them by age, youngest first
       .sort((a, b) => (a.age >= b.age ? 1 : -1))
+      // pull the first 5 from the list
+      .slice(0, numberToInclude)
       // return their name and age
       .map((person) => ({ name: person.name, age: person.age }))
   );
@@ -250,7 +283,7 @@ const getManagers = (people) =>
     .filter((person) =>
       // return only people where someone else has this person as their manager
       people.some((person2) => person2.managerId === person.id)
-    )  // this is really clever - will need to walk through to make sure i understand fully
+    ) // this is really clever - will need to walk through to make sure i understand fully
     // map the managers
     .map((manager) => ({
       // return an object directly
@@ -291,6 +324,10 @@ const buildReportsTree = (id) => {
 
   // get basic info from person (object destructuring)
   const { name, department } = thisPerson;
+  // the const below is the same as above, its short hand to create 2 variables which have the same names as properties on objects
+  // they are taken from
+  // const name = thisPerson.name;
+  // const department = thisPerson.department;
 
   // if this person doesn't manage anyone, just return their name
   if (reports.length === 0) {
